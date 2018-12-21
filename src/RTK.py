@@ -1,3 +1,6 @@
+# region Imports
+# endregion
+
 # Imports
 
 # Imports: Discord
@@ -8,10 +11,6 @@ from discord.ext.commands import Bot
 import asyncio
 
 # end of Imports: Discord
-
-# Report
-import RTK_Functions
-# end of Report
 
 import os
 import sys
@@ -88,6 +87,7 @@ async def info(ctx, user: discord.Member):
 # Run bot
 
 # bot.run(API_KEY)
+
 bot.run(str(os.environ.get("API_KEY")))
 
 # end of Run bot
@@ -100,5 +100,11 @@ bot.run(str(os.environ.get("API_KEY")))
 # @everyone
 # Shine
 # Delay
+# report life
+# Support for multple servers
+# report dogs
+
+
+# cd
 
 # Logging

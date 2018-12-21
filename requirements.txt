@@ -1,2 +1,4 @@
 discord
 asyncio
+gspread
+oauth2client

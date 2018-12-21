@@ -1,19 +1,23 @@
-# imports
+# region imports
 
-#imports: IO
+# region IO
 import json
 import pathlib
 import datetime
 import os.path
-# end of imports: IO
+# endregion
 
-# end of imports
+# region RTK
+import RTK.RTK_GSpread as RTK_GS
+# endregion
 
-# Constants
+# endregion
+
+# region Constants
 
 SCRIPT_NAME = "RTK_Funcitons"
 
-#Constants: IO
+# region IO
 
 FOLDER_NAME_DATA = "Data"
 FILE_NAME_LOG = "RTK_Funcitons_Log.txt"
@@ -32,16 +36,16 @@ for Var in list(AllVariables.keys()):
         FOLDERS_TO_CREATE.append(AllVariables[Var])
 del FOLDERS_TO_CREATE[-1]
 
-# end of Constants: IO
+# endregion
 
-#Constants: Report
+# region Report
 REPORT_CD = 5
-#end of Constants: Report
+# endregion
 
-# end of Constants
+# endregion
 
 
-# IO Functions
+# region IO Functions
 def Json_Read(filePath):
     Output_Log("Json_Read: Reading " + filePath)
 
@@ -49,9 +53,9 @@ def Json_Read(filePath):
         data = json.load(File)
 
     return data
-# end of IO Functions
+# endregion
 
-# Logging Functions
+# region Logging Functions
 
 
 def Output_Log(data):
@@ -61,9 +65,9 @@ def Output_Log(data):
         OutputFile.write(
             str(datetime.datetime.now().strftime(DATETIME_FORMAT_FILE)) + ": ")
         OutputFile.write(data + "\n\n")
-# end of Logging Functions
+# endregion
 
-# Report
+# region Report
 
 
 def SaveReportData():
@@ -80,66 +84,72 @@ def Report(Name):
         Output_Log("Reporting " + Name + " is on CD")
         return -1
     else:
-        ReportsData[Name] = ReportsData.get(Name, 0) + 1
+        if ReportsData.get(Name, None) == None:
+            ReportsData[Name] = 1
+            RTK_GS.addUser(Name, 1)
+        else:
+            ReportsData[Name] += 1
+            RTK_GS.updateReport(Name, ReportsData[Name])
         Output_Log(Name + " Reported " + str(ReportsData[Name]) + " Times")
-        SaveReportData()
         return ReportsData[Name]
+
 
 def Report_isOnCD(Name):
     if Name in Reports_NoCD:
         return False
 
     currentTime = datetime.datetime.now()
-    
-    isOnCD = LastReportTime.get(Name, None) != None and LastReportTime[Name] + datetime.timedelta(seconds=REPORT_CD) > currentTime
+
+    isOnCD = LastReportTime.get(
+        Name, None) != None and LastReportTime[Name] + datetime.timedelta(seconds=REPORT_CD) > currentTime
 
     LastReportTime[Name] = currentTime
     return isOnCD
+
 
 def Reports_LeaderBoard():
     # todo Format
     ReportsData_Sorted = sorted(ReportsData.items(), key=lambda Item: Item[1])
     ReportsData_Sorted.reverse()
-    
+
     Output_Log("Returning ReportsData_Sorted")
     return ReportsData_Sorted
-# end of Report
+# endregion
 
 
-# Initialize
+# region Initialize
 ReportsData = {}
 LastReportTime = {}
 
 Reports_NoCD = []
 
-def Initialize(NoCDList = []):
-    Output_Log("Initializing...")
 
-    if FILE_NAME_REPORT not in os.listdir():
-        SaveReportData()
-    else:
-        global ReportsData
-        ReportsData = Json_Read(FILE_NAME_REPORT)
+def Initialize(NoCDList=[]):
+    Output_Log("Initializing...")
+    
+    global ReportsData
+    ReportsData = RTK_GS.getReportsDic()
 
     global Reports_NoCD
     Reports_NoCD = NoCDList
 
     Output_Log("Finished initializing.")
 
-# end of Initialize
+# endregion
 
-# Main
+# region main
 
 
 def Main():
     Initialize()
+
     print(Report_isOnCD("Achilles221B"))
     print(Report_isOnCD("Achilles221B"))
 
-# end of Main
+# endregion
 
 
-# if __main__
+# region if __main__
 if __name__ == "__main__":
     Main()
-# end of if __main__
+# endregion

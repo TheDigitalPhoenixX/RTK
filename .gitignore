@@ -4,6 +4,8 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
-Testing.py
+_Temp/
 RunBot.bat
-RTK.psd
+client_secret.json
+RTK_Log.txt
+.env

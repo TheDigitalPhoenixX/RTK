@@ -2,7 +2,7 @@
 import discord
 from discord.ext import commands
 
-import RTK_Functions
+import RTK.RTK_Core as RTK_Core
 # end of Imports
 
 # Constants
@@ -23,7 +23,7 @@ REPORT_CUSTOM_BOT = "RTK BOT"
 # end of Constants
 
 # Initialize
-RTK_Functions.Initialize([REPORT_CUSTOM_UNI])
+RTK_Core.Initialize([REPORT_CUSTOM_UNI])
 # end of Initialize
 
 
@@ -36,7 +36,7 @@ class Report:
         # todo CD
         # todo Log Requester and rep count
         username = user.name
-        ReportCount = RTK_Functions.Report(username)
+        ReportCount = RTK_Core.Report(username)
 
         if user.nick != None:
             username = user.nick
@@ -51,14 +51,14 @@ class Report:
     @commands.command(name="Reports_LeaderBoard", description="Displays reports leader board", brief="Displays reports leader board", aliases=["ReportsLeaderBoard", "ReportsLB", "Reportsleaderboard", "ReportsLeaderboard", "reportsLeaderBoard", "reportsleaderboard"])
     async def Reports_LeaderBoard(self, ):
         # todo server name
-        await self.bot.say(RTK_Functions.Reports_LeaderBoard())
+        await self.bot.say(RTK_Core.Reports_LeaderBoard())
 
     # Commands: Report: Custom
 
     @commands.command(name="Report_Custom", description="Reports smth", brief="Reports smth", aliases=["report_custom", "ReportCustom", "reportcustom"])
     async def Report_Custom(self, Name: str):
         Name = Name.lower()
-        ReportCount = RTK_Functions.Report(Name)
+        ReportCount = RTK_Core.Report(Name)
 
         if ReportCount == -1:
             await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(Name))
@@ -69,7 +69,7 @@ class Report:
 
     @commands.command(name="ReportRiot", description="Reports " + REPORT_CUSTOM_RIOT , brief="Reports " + REPORT_CUSTOM_RIOT, aliases=["Reportriot", "reportRiot", "reportriot"])
     async def ReportRiot(self):  # ! Call Report_Custom
-        ReportCount = RTK_Functions.Report(REPORT_CUSTOM_RIOT)
+        ReportCount = RTK_Core.Report(REPORT_CUSTOM_RIOT)
 
         if ReportCount == -1:
             await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_RIOT))
@@ -80,7 +80,7 @@ class Report:
 
     @commands.command(name="ReportUni", description="Reports " + REPORT_CUSTOM_UNI, brief="Reports " + REPORT_CUSTOM_UNI, aliases=["Reportuni", "reportUni", "reportuni"])
     async def ReportUni(self):  # ! Call Report_Custom
-        ReportCount = RTK_Functions.Report(REPORT_CUSTOM_UNI)
+        ReportCount = RTK_Core.Report(REPORT_CUSTOM_UNI)
 
         if ReportCount == -1:
             await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_UNI))
@@ -91,7 +91,7 @@ class Report:
 
     @commands.command(name="ReportSameh", description="Reports " + REPORT_CUSTOM_SAMEH, brief="Reports " + REPORT_CUSTOM_SAMEH, aliases=["Reportsameh", "reportSameh", "reportsameh"])
     async def ReportSameh(self):  # ! Call Report_Custom
-        ReportCount = RTK_Functions.Report(REPORT_CUSTOM_SAMEH)
+        ReportCount = RTK_Core.Report(REPORT_CUSTOM_SAMEH)
 
         if ReportCount == -1:
             await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_SAMEH))
@@ -102,7 +102,7 @@ class Report:
 
     @commands.command(name="ReportBot", description="Reports " + REPORT_CUSTOM_BOT, brief="Reports " + REPORT_CUSTOM_BOT, aliases=["reportBot", "Reportbot", "reportbot"])
     async def ReportBot(self):  # ! Call Report_Custom
-        ReportCount = RTK_Functions.Report(REPORT_CUSTOM_BOT)
+        ReportCount = RTK_Core.Report(REPORT_CUSTOM_BOT)
 
         if ReportCount == -1:
             await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_BOT))
@@ -114,3 +114,5 @@ class Report:
 
 def setup(bot):
     bot.add_cog(Report(bot))
+
+#Todo Async ???
