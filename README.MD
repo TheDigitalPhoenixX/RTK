@@ -6,7 +6,7 @@ The System works as follows:
 
 ## Reports
 
-Users can report other Users using the Discord*insert Link to bot here* bot. The discord bot will update the database containing the number of reports of each user.
+Users can report other Users using the Discord bot. The discord bot will update the database containing the number of reports of each user.
 
 ## Kills
 

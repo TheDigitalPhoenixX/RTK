@@ -7,5 +7,7 @@
 _Temp/
 RunBot.bat
 client_secret.json
-RTK_Log.txt
 .env
+
+RTK_Reports.json
+RTK_Log.txt
