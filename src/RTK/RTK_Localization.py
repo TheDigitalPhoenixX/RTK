@@ -9,7 +9,8 @@ import os.path
 
 # region Constants
 
-LOCALIZATION_FOLDER_PATH = "src/RTK/data/Localization/"
+FILE_PATH = os.path.realpath(__file__)
+LOCALIZATION_FOLDER_PATH = os.path.join(FILE_PATH[:-len(os.path.basename(FILE_PATH))], "data/Localization/")
 LOCALIZATION_FILES_FORMAT = LOCALIZATION_FOLDER_PATH + "Localization_{}.json"
 
 # endregion

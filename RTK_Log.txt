@@ -4040,3 +4040,31 @@ Finished initializing.
 
 2018-12-28 14-39-36: Ubisoft Reported 5 Times
 
+2018-12-28 18-06-07: Initializing...
+
+2018-12-28 18-06-08: Finished initializing.
+
+2018-12-28 18-07-05: Initializing...
+
+2018-12-28 18-07-05: Finished initializing.
+
+2018-12-28 18-15-00: Initializing...
+
+2018-12-28 18-15-00: Finished initializing.
+
+2018-12-28 18-18-22: Initializing...
+
+2018-12-28 18-18-22: Finished initializing.
+
+2018-12-28 18-18-45: Reporting RemonIsaac
+
+2018-12-28 18-18-46: RemonIsaac Reported 16 Times
+
+2018-12-28 18-27-27: Initializing...
+
+2018-12-28 18-27-28: Finished initializing.
+
+2018-12-28 18-27-36: Reporting RemonIsaac
+
+2018-12-28 18-27-37: RemonIsaac Reported 17 Times
+

@@ -1,6 +1,7 @@
 # region Imports
 
 import json
+import os.path
 
 # region Discord
 
@@ -33,7 +34,8 @@ RESPONSES_LEADERBOARD = "ReportsLeaderBoard"
 
 # region Custom
 
-REPORT_CUSTOM_FILE_PATH = r"src\RTK\data\ReportCustom.json"
+FILE_PATH = os.path.realpath(__file__)
+REPORT_CUSTOM_FILE_PATH = os.path.join(FILE_PATH[:-len(os.path.basename(FILE_PATH))], r"RTK\data\ReportCustom.json")
 
 # ! Call Report_Custom
 EXEC_TEMPLATE = """
