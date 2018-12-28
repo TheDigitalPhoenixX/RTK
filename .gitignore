@@ -4,10 +4,11 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
+RTK_Log.txt
 _Temp/
 RunBot.bat
 client_secret.json
 .env
 
 RTK_Reports.json
-RTK_Log.txt
+
