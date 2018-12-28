@@ -8,14 +8,16 @@ import os.path
 # endregion
 
 # region RTK
+
 import RTK.RTK_GSpread as RTK_GS
+
 # endregion
 
 # endregion
 
 # region Constants
 
-SCRIPT_NAME = "RTK_Funcitons"
+SCRIPT_NAME = "RTK_Core"
 
 # region IO
 
@@ -70,12 +72,6 @@ def Output_Log(data):
 # region Report
 
 
-def SaveReportData():
-    Output_Log("Saving ReportData to file")
-    with open(FILE_NAME_REPORT, "w+") as ReportsFile:
-        json.dump(ReportsData, ReportsFile)
-
-
 def Report(Name):
     assert type(Name) == str,  str(Name) + " isn't a string"
 
@@ -112,7 +108,7 @@ def Reports_LeaderBoard():
     ReportsData_Sorted = sorted(ReportsData.items(), key=lambda Item: Item[1])
     ReportsData_Sorted.reverse()
 
-    Output_Log("Returning ReportsData_Sorted")
+    Output_Log("Returning Sorted Reports data (LeaderBoard)")
     return ReportsData_Sorted
 # endregion
 

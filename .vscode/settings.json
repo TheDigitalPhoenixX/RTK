@@ -1,3 +1,8 @@
 {
-    "python.pythonPath": "C:\\Users\\mohamed.xyz\\AppData\\Local\\Programs\\Python\\Python36\\python.exe"
+    "python.pythonPath": "C:\\Users\\mohamed.xyz\\AppData\\Local\\Programs\\Python\\Python36\\python.exe",
+    "markdownlint.config":{
+        "MD024":{ 
+            "siblings_only": true
+        }
+    }
 }

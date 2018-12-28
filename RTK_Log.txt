@@ -3930,3 +3930,113 @@ Finished initializing.
 
 2018-12-21 02-56-41: diaa Reported 12 Times
 
+2018-12-28 03-17-20: Initializing...
+
+2018-12-28 03-17-20: Finished initializing.
+
+2018-12-28 03-18-10: Initializing...
+
+2018-12-28 03-18-10: Finished initializing.
+
+2018-12-28 03-18-54: Initializing...
+
+2018-12-28 03-18-54: Finished initializing.
+
+2018-12-28 03-19-20: Initializing...
+
+2018-12-28 03-19-20: Finished initializing.
+
+2018-12-28 03-19-47: Initializing...
+
+2018-12-28 03-19-47: Finished initializing.
+
+2018-12-28 03-20-52: Initializing...
+
+2018-12-28 03-20-52: Finished initializing.
+
+2018-12-28 03-21-04: Reporting Life
+
+2018-12-28 03-21-06: Life Reported 1 Times
+
+2018-12-28 04-14-57: Reporting Life
+
+2018-12-28 04-14-58: Life Reported 2 Times
+
+2018-12-28 09-20-39: Initializing...
+
+2018-12-28 09-20-39: Finished initializing.
+
+2018-12-28 09-20-58: Reporting Dogs
+
+2018-12-28 09-20-59: Dogs Reported 1 Times
+
+2018-12-28 09-42-23: Initializing...
+
+2018-12-28 09-42-25: Finished initializing.
+
+2018-12-28 13-10-28: Reporting Dogs
+
+2018-12-28 13-10-33: Dogs Reported 2 Times
+
+2018-12-28 13-59-54: Initializing...
+
+2018-12-28 13-59-54: Finished initializing.
+
+2018-12-28 14-01-18: Initializing...
+
+2018-12-28 14-01-19: Finished initializing.
+
+2018-12-28 14-03-44: Returning Sorted Reports data (LeaderBoard)
+
+2018-12-28 14-08-21: Initializing...
+
+2018-12-28 14-08-22: Finished initializing.
+
+2018-12-28 14-08-45: Returning Sorted Reports data (LeaderBoard)
+
+2018-12-28 14-09-15: Initializing...
+
+2018-12-28 14-09-16: Finished initializing.
+
+2018-12-28 14-09-51: Initializing...
+
+2018-12-28 14-09-51: Finished initializing.
+
+2018-12-28 14-10-06: Returning Sorted Reports data (LeaderBoard)
+
+2018-12-28 14-10-34: Initializing...
+
+2018-12-28 14-10-34: Finished initializing.
+
+2018-12-28 14-10-51: Returning Sorted Reports data (LeaderBoard)
+
+2018-12-28 14-35-31: Returning Sorted Reports data (LeaderBoard)
+
+2018-12-28 14-37-45: Reporting Ubisoft
+
+2018-12-28 14-37-49: Ubisoft Reported 1 Times
+
+2018-12-28 14-38-12: Reporting MohamedXyz
+
+2018-12-28 14-38-13: MohamedXyz Reported 243 Times
+
+2018-12-28 14-38-19: Reporting MohamedXyz
+
+2018-12-28 14-38-19: MohamedXyz Reported 244 Times
+
+2018-12-28 14-38-19: Reporting Ubisoft
+
+2018-12-28 14-38-20: Ubisoft Reported 2 Times
+
+2018-12-28 14-38-31: Reporting Ubisoft
+
+2018-12-28 14-38-31: Ubisoft Reported 3 Times
+
+2018-12-28 14-38-40: Reporting Ubisoft
+
+2018-12-28 14-38-40: Ubisoft Reported 4 Times
+
+2018-12-28 14-39-35: Reporting Ubisoft
+
+2018-12-28 14-39-36: Ubisoft Reported 5 Times
+

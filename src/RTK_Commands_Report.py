@@ -1,30 +1,73 @@
-# Imports
+# region Imports
+
+import json
+
+# region Discord
+
 import discord
 from discord.ext import commands
 
+# endregion
+
+# region RTK
+
 import RTK.RTK_Core as RTK_Core
-# end of Imports
+import RTK.RTK_Localization
 
-# Constants
-TEXT_FORMAT_REPORTED = ":right_facing_fist: {} Reported :left_facing_fist:"
-TEXT_FORMAT_REPORT_COUNT = "{} has been reported {} times."
+# endregion
 
-TEXT_FORMAT_REPORT_ON_CD = "You just reported {}, You can't report him right now."
+# endregion
 
+# region Constants
 
-# Constants: Custom
+# region Responses
 
-REPORT_CUSTOM_SAMEH = "Achilles221B"
-REPORT_CUSTOM_RIOT = "Riot"
+RESPONSES = RTK.RTK_Localization.GetLocalizedText()
+
+RESPONSES_REPORTED = "Reported"
+RESPONSES_REPORT_COUNT = "ReportCount"
+RESPONSES_REPORT_ON_CD = "ReportOnCD"
+RESPONSES_LEADERBOARD = "ReportsLeaderBoard"
+
+# endregion
+
+# region Custom
+
+REPORT_CUSTOM_FILE_PATH = r"src\RTK\data\ReportCustom.json"
+
+# ! Call Report_Custom
+EXEC_TEMPLATE = """
+@commands.command(name="Report{name}", description="Reports {value}", brief="Reports {value}", aliases=["report"+"{name}", "Report"+"{name}".lower(), "report"+"{name}".lower()])
+async def Report{name}(self):
+    ReportCount = RTK_Core.Report("{value}")
+
+    if ReportCount == -1:
+        await self.bot.say(RESPONSES[RESPONSES_REPORT_ON_CD].format("{value}"))
+    else:
+        await self.bot.say(RESPONSES[RESPONSES_REPORTED].format("{value}"))
+        await self.bot.say(RESPONSES[RESPONSES_REPORT_COUNT].format("{value}", ReportCount))"""
+
+# REPORT_CUSTOM_SAMEH = "Achilles221B"
+# REPORT_CUSTOM_RIOT = "Riot"
 REPORT_CUSTOM_UNI = "Ain Shams University Faculty of Engineering"
-REPORT_CUSTOM_BOT = "RTK BOT"
+# REPORT_CUSTOM_BOT = "RTK BOT"
 
-# end of Constants: Custom
-# end of Constants
+# endregion
 
-# Initialize
+# region LeaderBoard
+LEADERBOARD_REPORTS_EXTRA_PADDING = 1
+LEADERBOARD_FORMAT = "#{Numbering:{NumberingWidth}d} {Reports:{ReportsWidth}d} {name} \n"
+# endregion
+
+# endregion
+
+# region Initialize
 RTK_Core.Initialize([REPORT_CUSTOM_UNI])
-# end of Initialize
+with open(REPORT_CUSTOM_FILE_PATH) as RepCustomFile:
+    ReportCustom = json.load(RepCustomFile)
+# endregion
+
+# region Report
 
 
 class Report:
@@ -42,16 +85,25 @@ class Report:
             username = user.nick
 
         if ReportCount == -1:
-            await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(username))
+            await self.bot.say(RESPONSES[RESPONSES_REPORT_ON_CD].format(username))
         else:
 
-            await self.bot.say(TEXT_FORMAT_REPORTED.format(username))
-            await self.bot.say(TEXT_FORMAT_REPORT_COUNT.format(username, ReportCount))
+            await self.bot.say(RESPONSES[RESPONSES_REPORTED].format(username))
+            await self.bot.say(RESPONSES[RESPONSES_REPORT_COUNT].format(username, ReportCount))
 
     @commands.command(name="Reports_LeaderBoard", description="Displays reports leader board", brief="Displays reports leader board", aliases=["ReportsLeaderBoard", "ReportsLB", "Reportsleaderboard", "ReportsLeaderboard", "reportsLeaderBoard", "reportsleaderboard"])
     async def Reports_LeaderBoard(self, ):
         # todo server name
-        await self.bot.say(RTK_Core.Reports_LeaderBoard())
+        StringToPrint = ""
+        ReportCount = RTK_Core.Reports_LeaderBoard()
+        HighestNumOfDigits_Reports = LEADERBOARD_REPORTS_EXTRA_PADDING + \
+            len(str(ReportCount[0][1]))
+        HighestNumOfDigits_Numbering = len(str(len(ReportCount)))
+        for UserNum in range(len(ReportCount)):
+            StringToPrint += LEADERBOARD_FORMAT.format(Numbering=UserNum+1, NumberingWidth=HighestNumOfDigits_Numbering,
+                                                       name=ReportCount[UserNum][0], Reports=ReportCount[UserNum][1], ReportsWidth=HighestNumOfDigits_Reports)
+        await self.bot.say(RESPONSES[RESPONSES_LEADERBOARD])
+        await self.bot.say(StringToPrint)
 
     # Commands: Report: Custom
 
@@ -61,58 +113,17 @@ class Report:
         ReportCount = RTK_Core.Report(Name)
 
         if ReportCount == -1:
-            await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(Name))
+            await self.bot.say(RESPONSES[RESPONSES_REPORT_ON_CD].format(Name))
         else:
+            await self.bot.say(RESPONSES[RESPONSES_REPORTED].format(Name))
+            await self.bot.say(RESPONSES[RESPONSES_REPORT_COUNT].format(Name, ReportCount))
 
-            await self.bot.say(TEXT_FORMAT_REPORTED.format(Name))
-            await self.bot.say(TEXT_FORMAT_REPORT_COUNT.format(Name, ReportCount))
-
-    @commands.command(name="ReportRiot", description="Reports " + REPORT_CUSTOM_RIOT , brief="Reports " + REPORT_CUSTOM_RIOT, aliases=["Reportriot", "reportRiot", "reportriot"])
-    async def ReportRiot(self):  # ! Call Report_Custom
-        ReportCount = RTK_Core.Report(REPORT_CUSTOM_RIOT)
-
-        if ReportCount == -1:
-            await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_RIOT))
-        else:
-
-            await self.bot.say(TEXT_FORMAT_REPORTED.format(REPORT_CUSTOM_RIOT))
-            await self.bot.say(TEXT_FORMAT_REPORT_COUNT.format(REPORT_CUSTOM_RIOT, ReportCount))
-
-    @commands.command(name="ReportUni", description="Reports " + REPORT_CUSTOM_UNI, brief="Reports " + REPORT_CUSTOM_UNI, aliases=["Reportuni", "reportUni", "reportuni"])
-    async def ReportUni(self):  # ! Call Report_Custom
-        ReportCount = RTK_Core.Report(REPORT_CUSTOM_UNI)
-
-        if ReportCount == -1:
-            await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_UNI))
-        else:
-
-            await self.bot.say(TEXT_FORMAT_REPORTED.format(REPORT_CUSTOM_UNI))
-            await self.bot.say(TEXT_FORMAT_REPORT_COUNT.format(REPORT_CUSTOM_UNI, ReportCount))
-
-    @commands.command(name="ReportSameh", description="Reports " + REPORT_CUSTOM_SAMEH, brief="Reports " + REPORT_CUSTOM_SAMEH, aliases=["Reportsameh", "reportSameh", "reportsameh"])
-    async def ReportSameh(self):  # ! Call Report_Custom
-        ReportCount = RTK_Core.Report(REPORT_CUSTOM_SAMEH)
-
-        if ReportCount == -1:
-            await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_SAMEH))
-        else:
-
-            await self.bot.say(TEXT_FORMAT_REPORTED.format(REPORT_CUSTOM_SAMEH))
-            await self.bot.say(TEXT_FORMAT_REPORT_COUNT.format(REPORT_CUSTOM_SAMEH, ReportCount))
-
-    @commands.command(name="ReportBot", description="Reports " + REPORT_CUSTOM_BOT, brief="Reports " + REPORT_CUSTOM_BOT, aliases=["reportBot", "Reportbot", "reportbot"])
-    async def ReportBot(self):  # ! Call Report_Custom
-        ReportCount = RTK_Core.Report(REPORT_CUSTOM_BOT)
-
-        if ReportCount == -1:
-            await self.bot.say(TEXT_FORMAT_REPORT_ON_CD.format(REPORT_CUSTOM_BOT))
-        else:
-
-            await self.bot.say(TEXT_FORMAT_REPORTED.format(REPORT_CUSTOM_BOT))
-            await self.bot.say(TEXT_FORMAT_REPORT_COUNT.format(REPORT_CUSTOM_BOT, ReportCount))
+    for custom in ReportCustom:
+        exec(EXEC_TEMPLATE.format(name=custom, value=ReportCustom[custom]))
+# endregion
 
 
 def setup(bot):
     bot.add_cog(Report(bot))
 
-#Todo Async ???
+# Todo Async ???

@@ -64,12 +64,15 @@ SHEET_REPORTS_ROW_NUM = 2
 
 # region Initialize
 
-scope = ['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive']
-# creds = ServiceAccountCredentials.from_json_keyfile_name("client_secret.json", scope)
-creds = ServiceAccountCredentials.from_json_keyfile_dict(ast.literal_eval(os.environ.get("GSPREAD_CLIENT_SECRET")), scope)
-client = gspread.authorize(creds)
-sheet = client.open("RTK").sheet1
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+sheet = None
+def Initialize():
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(ast.literal_eval(os.environ.get("GSPREAD_CLIENT_SECRET")), scope)
+    client = gspread.authorize(creds)
+    global sheet
+    sheet = client.open("RTK").sheet1
+Initialize()
+
 # endregion
 
 # region Functions
@@ -89,6 +92,7 @@ def getReportsDic():
         None
     """
     return sheet.get_all_records()[0]
+    
 def addUser(name, value):
     """
     Adds the given name as a user with the given value as his/her report count.
@@ -121,7 +125,12 @@ def updateReport(name, newValue):
     Raises:
         None
     """
-    sheet.update_cell(SHEET_REPORTS_ROW_NUM, sheet.find(name).col, newValue)# ! not the most eff way
+    try:
+        sheet.update_cell(SHEET_REPORTS_ROW_NUM, sheet.find(name).col, newValue)# ! not the most eff way
+    except gspread.exceptions.APIError:
+        print("RTK_GSpread: exceptions.APIError catched")
+        Initialize()
+        sheet.update_cell(SHEET_REPORTS_ROW_NUM, sheet.find(name).col, newValue)# ! not the most eff way
 
 # endregion
 

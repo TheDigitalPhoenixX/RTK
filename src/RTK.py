@@ -1,44 +1,35 @@
 # region Imports
-# endregion
 
-# Imports
-
-# Imports: Discord
+# region Discord
 
 import discord
 from discord.ext import commands
 from discord.ext.commands import Bot
 import asyncio
 
-# end of Imports: Discord
+# endregion
 
 import os
 import sys
 import datetime
 
-# end of Imports
+# endregion
 
-# Constants
-
-#Constants: bot
-
+# region Constants
 
 COMMMAND_PREFIX = "!!"
-# end of Constants: bot
 
+# endregion
 
-
-# initialize
+# region initialize
 
 bot = commands.Bot(command_prefix=COMMMAND_PREFIX)
 
 bot.load_extension('RTK_Commands_Report')
 
+# endregion
 
-# end of initialize
-
-# Events
-
+# region Events
 
 @bot.event
 async def on_ready():
@@ -47,9 +38,9 @@ async def on_ready():
     print("ID: " + bot.user.id)
     print("--------")
 
-# end of Events
+# endregion
 
-# Commands
+# region Commands
 
 
 @bot.command(pass_context=True)
@@ -67,44 +58,19 @@ async def info(ctx, user: discord.Member):
     await bot.say("The users highest role is: {}".format(user.top_role))
     await bot.say("The user joined at: {}".format(user.joined_at))
 
+# endregion
 
-#Commands: Kill
-
-# end of Commands: Kill
-
-# Commands: Exit
-
-# @bot.command()
-# async def GoAway():
-#     await bot.say(":wave:")
-#     bot.
-#     sys.exit(1)
-
-# end of Commands: Exit
-
-# end of Commands
-
-# Run bot
-
-# bot.run(API_KEY)
-
+#region Run Bot
 bot.run(str(os.environ.get("API_KEY")))
-
-# end of Run bot
+# endregion
 
 # todo
-# in and out msg
-# help
 # only accept from rtk
 # wrong command
 # @everyone
 # Shine
 # Delay
-# report life
 # Support for multple servers
-# report dogs
-
-
-# cd
-
+# CD
 # Logging
+# Restart or shutdown Bot
