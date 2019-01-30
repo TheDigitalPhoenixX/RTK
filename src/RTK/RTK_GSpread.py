@@ -1,10 +1,8 @@
 # https://github.com/burnash/gspread
 
-"""Example Google style docstrings.
+"""Report To Kill Google Spread module.
 
-This module demonstrates documentation as specified by the `Google Python
-Style Guide`_. Docstrings may extend over multiple lines. Sections are created
-with a section header and a colon followed by a block of indented text.
+This module allows RTK scripts to communicate with google sheets to save report records.
 
 Example:
     Examples can be given using either the ``Example`` or ``Examples``
@@ -42,38 +40,62 @@ on the first line, separated by a colon.
 
 # region Imports
 
+# region Logging
+import logging
+import RTK.RTK_Logging as RTK_Logging
+# endregion Logging
+
 # region Gspread
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-# endregion
+# endregion Gspread
 
-import os
-import ast
-import pprint
+from os import environ
+from ast import literal_eval
+import os.path
 
-# endregion
+# endregion Imports
 
 # region Constants
 
+# region GSpread
+WORKSHEET_NAME = "RTK"
+
 SHEET_NAMES_ROW_NUM = 1
 SHEET_REPORTS_ROW_NUM = 2
+# endregion GSpread
 
-# endregion
+FILE_PATH = os.path.realpath(__file__)
+ROOT_FOLDER_PATH = FILE_PATH[:-len(os.path.basename(FILE_PATH))]
+
+# region Logging
+LOG_FILE_PATH = os.path.join(
+    ROOT_FOLDER_PATH, os.pardir, "logs", f'{__name__}.log')  # TODO Name of the file
+# endregion Logging
+
+# endregion Constants
+
+# region Logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+logger.addHandler(RTK_Logging.GetFileHandler(LOG_FILE_PATH))
+logger.addHandler(RTK_Logging.GetStreamHandler())
+logger.addHandler(RTK_Logging.GetCommonFileHandler())
+
+# endregion Logging
 
 # region Initialize
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-sheet = None
-def Initialize():
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(ast.literal_eval(os.environ.get("GSPREAD_CLIENT_SECRET")), scope)
-    client = gspread.authorize(creds)
-    global sheet
-    sheet = client.open("RTK").sheet1
-Initialize()
+creds = ServiceAccountCredentials.from_json_keyfile_dict(literal_eval(environ.get("GSPREAD_CLIENT_SECRET")), scope)
+client = gspread.authorize(creds)
+worksheet = client.open(WORKSHEET_NAME).sheet1
 
-# endregion
+# endregion Initialize
 
 # region Functions
 
@@ -91,7 +113,13 @@ def getReportsDic():
     Raises:
         None
     """
-    return sheet.get_all_records()[0]
+    logger.debug("Returning Reports Dic")
+    try:
+        return worksheet.get_all_records()[0]
+    except gspread.exceptions.APIError:
+        client.login()
+        logger.exception("gspread.exceptions.APIError Caught")
+        return worksheet.get_all_records()[0]
     
 def addUser(name, value):
     """
@@ -107,9 +135,26 @@ def addUser(name, value):
     Raises:
         None
     """
-    NewUserCol = len(getReportsDic()) +1
-    sheet.update_cell(SHEET_NAMES_ROW_NUM, NewUserCol, name)
-    sheet.update_cell(SHEET_REPORTS_ROW_NUM, NewUserCol, value)
+    NewUserCol = len(getReportsDic()) + 1 # TODO a lot of calls
+    try:
+        # logger.debug(f"Before: {worksheet.col_count}")
+        worksheet.add_cols(1)
+        # temp = worksheet.resize(cols=worksheet.col_count + 1)
+        # logger.debug(temp)
+        worksheet._properties['gridProperties']['columnCount'] += 1
+        worksheet.update_cell(SHEET_NAMES_ROW_NUM, NewUserCol, name)
+        worksheet.update_cell(SHEET_REPORTS_ROW_NUM, NewUserCol, value)
+        # logger.debug(f"After: {worksheet.col_count}")
+    except gspread.exceptions.APIError:
+        logger.exception("gspread.exceptions.APIError Caught")
+        client.login()
+        worksheet.add_cols(1)
+        worksheet._properties['gridProperties']['columnCount'] += 1
+        worksheet.update_cell(SHEET_NAMES_ROW_NUM, NewUserCol, name)
+        worksheet.update_cell(SHEET_REPORTS_ROW_NUM, NewUserCol, value)
+
+    logger.info(f"Added user {name} with value {value} at Col {NewUserCol}")
+    
 
 def updateReport(name, newValue):
     """
@@ -126,33 +171,32 @@ def updateReport(name, newValue):
         None
     """
     try:
-        sheet.update_cell(SHEET_REPORTS_ROW_NUM, sheet.find(name).col, newValue)# ! not the most eff way
+        worksheet.update_cell(SHEET_REPORTS_ROW_NUM, worksheet.find(name).col, newValue)# ! not the most eff way
     except gspread.exceptions.APIError:
-        print("RTK_GSpread: exceptions.APIError catched")
-        Initialize()
-        sheet.update_cell(SHEET_REPORTS_ROW_NUM, sheet.find(name).col, newValue)# ! not the most eff way
+        logger.exception("gspread.exceptions.APIError Caught")
+        client.login()
+        worksheet.update_cell(SHEET_REPORTS_ROW_NUM, worksheet.find(name).col, newValue)# ! not the most eff way
 
-# endregion
+    logger.info(f"Updated User {name} to value {newValue}")
+
+# endregion Functions
 
 # region main
 
 
 def main():
     
+    worksheet.add_cols(1)
 
-    allData = sheet.get_all_records()
-    pprint.pprint(allData)
-
-    # sheet.update_cell(SHEET_REPORTS_ROW_NUM, sheet.find(
-    #     "MohamedXyz").col, 235)  # ! not the most eff way
-    # # sheet.update_cell(2,15,567)
+    # allData = sheet.get_all_records()
+    # print(allData)
 
     # allData = sheet.get_all_records()
     # pprint.pprint(allData)
 
-# endregion
+# endregion main
 
 # region if __main__
 if __name__ == "__main__":
     main()
-# endregion
+# endregion if __main__

@@ -1,8 +1,8 @@
 {
-    "SAMEH" : "Achilles221B",
-    "RIOT" : "Riot",
-    "UNI" : "Ain Shams University Faculty of Engineering",
-    "BOT" : "RTK",
+    "Sameh" : "Achilles221B",
+    "Riot" : "Riot",
+    "Uni" : "Ain Shams University Faculty of Engineering",
+    "Bot" : "RTK",
     "Life": "Life",
     "Dogs": "Dogs",
     "Uplay": "Uplay",
@@ -11,5 +11,7 @@
     "Discord": "Discord",
     "Everyone": "Everyone",
     "Everything": "Everything",
-    "Remon": "RemonIsaac"
+    "Remon": "RemonIsaac",
+    "Steam": "Steam",
+    "Apple": "Apple"
 }

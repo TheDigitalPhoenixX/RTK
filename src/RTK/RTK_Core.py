@@ -1,73 +1,50 @@
 # region imports
 
-# region IO
-import json
-import pathlib
-import datetime
+# region Logging
+import logging
+import RTK.RTK_Logging as RTK_Logging
 import os.path
-# endregion
+# endregion Logging
 
 # region RTK
 
 import RTK.RTK_GSpread as RTK_GS
 
-# endregion
+# region CD
+import datetime
+# endregion CD
 
-# endregion
+# endregion RTK
+
+# endregion imports
 
 # region Constants
 
-SCRIPT_NAME = "RTK_Core"
+FILE_PATH = os.path.realpath(__file__)
+ROOT_FOLDER_PATH = FILE_PATH[:-len(os.path.basename(FILE_PATH))]
 
-# region IO
-
-FOLDER_NAME_DATA = "Data"
-FILE_NAME_LOG = "RTK_Funcitons_Log.txt"
-FILE_NAME_REPORT = "RTK_Reports.json"
-FILE_NAME_LOG = "RTK_Log.txt"
-#FILE_PATH_LOG = os.path.join(FOLDER_NAME_DATA, FILE_NAME_LOG)
-
-DATETIME_FORMAT_FILE = "%Y-%m-%d %H-%M-%S"
-
-FOLDER_NAME_PREFIX = "FOLDER_NAME"
-
-FOLDERS_TO_CREATE = []
-AllVariables = locals()
-for Var in list(AllVariables.keys()):
-    if Var.startswith(FOLDER_NAME_PREFIX):
-        FOLDERS_TO_CREATE.append(AllVariables[Var])
-del FOLDERS_TO_CREATE[-1]
-
-# endregion
+# region Logging
+LOG_FILE_PATH = os.path.join(
+    ROOT_FOLDER_PATH, os.pardir, "logs", f'{__name__}.log')  # TODO Name of the file
+# endregion Logging
 
 # region Report
 REPORT_CD = 5
-# endregion
+# endregion Report
 
-# endregion
-
-
-# region IO Functions
-def Json_Read(filePath):
-    Output_Log("Json_Read: Reading " + filePath)
-
-    with open(filePath) as File:
-        data = json.load(File)
-
-    return data
-# endregion
-
-# region Logging Functions
+# endregion Constants
 
 
-def Output_Log(data):
-    print(SCRIPT_NAME + " " + data)
+# region Logging
 
-    with open(FILE_NAME_LOG, "a") as OutputFile:
-        OutputFile.write(
-            str(datetime.datetime.now().strftime(DATETIME_FORMAT_FILE)) + ": ")
-        OutputFile.write(data + "\n\n")
-# endregion
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+logger.addHandler(RTK_Logging.GetFileHandler(LOG_FILE_PATH))
+logger.addHandler(RTK_Logging.GetStreamHandler())
+logger.addHandler(RTK_Logging.GetCommonFileHandler())
+
+# endregion Logging
 
 # region Report
 
@@ -75,18 +52,19 @@ def Output_Log(data):
 def Report(Name):
     assert type(Name) == str,  str(Name) + " isn't a string"
 
-    Output_Log("Reporting " + Name)
+    logger.info("Reporting " + Name)
     if Report_isOnCD(Name):
-        Output_Log("Reporting " + Name + " is on CD")
+        logger.info(f"Reporting {Name} is on CD.")
         return -1
     else:
-        if ReportsData.get(Name, None) == None:
+        if ReportsData.get(Name, None) == None:  # TODO EAFP
             ReportsData[Name] = 1
             RTK_GS.addUser(Name, 1)
         else:
             ReportsData[Name] += 1
             RTK_GS.updateReport(Name, ReportsData[Name])
-        Output_Log(Name + " Reported " + str(ReportsData[Name]) + " Times")
+
+        logger.info(f"{Name} Reported {ReportsData[Name]} times.")
         return ReportsData[Name]
 
 
@@ -104,13 +82,12 @@ def Report_isOnCD(Name):
 
 
 def Reports_LeaderBoard():
-    # todo Format
-    ReportsData_Sorted = sorted(ReportsData.items(), key=lambda Item: Item[1])
-    ReportsData_Sorted.reverse()
+    ReportsData_Sorted = sorted(
+        ReportsData.items(), key=lambda Item: Item[1], reverse=True)
 
-    Output_Log("Returning Sorted Reports data (LeaderBoard)")
+    logger.info("Returning Sorted Reports data")
     return ReportsData_Sorted
-# endregion
+# endregion Report
 
 
 # region Initialize
@@ -120,20 +97,20 @@ LastReportTime = {}
 Reports_NoCD = []
 
 
-def Initialize(NoCDList=[]):
-    Output_Log("Initializing...")
-    
+def Initialize(NoCDList=[]):  # TODO why does it exist ?
+    logger.info("Initializing...")
+
     global ReportsData
     ReportsData = RTK_GS.getReportsDic()
 
     global Reports_NoCD
     Reports_NoCD = NoCDList
 
-    Output_Log("Finished initializing.")
+    logger.info("Finished initializing.")
 
-# endregion
+# endregion Initialize
 
-# region main
+# region Main
 
 
 def Main():
@@ -142,10 +119,10 @@ def Main():
     print(Report_isOnCD("Achilles221B"))
     print(Report_isOnCD("Achilles221B"))
 
-# endregion
+# endregion Main
 
 
 # region if __main__
 if __name__ == "__main__":
     Main()
-# endregion
+# endregion if __main__
