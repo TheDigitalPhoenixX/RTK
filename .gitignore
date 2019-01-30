@@ -12,3 +12,4 @@ client_secret.json
 .env
 
 /src/logs/*
+!/src/logs/.gitkeep
