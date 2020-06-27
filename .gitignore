@@ -4,6 +4,12 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
-Testing.py
+/src/__pycache__/
+
+_Temp/
 RunBot.bat
-RTK.psd
+client_secret.json
+.env
+
+/src/logs/*
+!/src/logs/.gitkeep
