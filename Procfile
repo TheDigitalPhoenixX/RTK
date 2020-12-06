@@ -1,1 +1,1 @@
-worker: python src/RTK.py
+worker: python -m RTK

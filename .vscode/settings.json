@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\mohamed.xyz\\AppData\\Local\\Programs\\Python\\Python36\\python.exe",
+    "python.pythonPath": "c:\\Users\\moham\\Workspace\\Projects\\RTK\\RTK\\venv\\Scripts\\python.exe",
     "markdownlint.config":{
         "MD024":{ 
             "siblings_only": true
